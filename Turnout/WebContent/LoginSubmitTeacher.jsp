@@ -9,8 +9,13 @@
 </head>
 <body>
 <%
-String email = request.getParameter("email");
-String password = request.getParameter("password");
+	String email = request.getParameter("email");
+	String password = request.getParameter("password");
+	
+
+	// JDBC driver name and database URL
+	    String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
+	    String DB_URL = "jdbc:mysql://www.virtualhighs.com:3306/turnout";
 
 %>
 
