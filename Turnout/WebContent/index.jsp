@@ -56,14 +56,39 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="signup.jsp"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-        <li><a href="login.jsp"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        <%	if(session.getAttribute("ID")==null)
+        		{	
+        			%>
+        				<li><a href="login.jsp"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        			<% 
+        		}
+       		else
+       		{
+       			%>
+				<li><a href="logout.jsp"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+				<% 
+       		}
+        %>
+        
       </ul>
     </div>
   </div>
 </nav>
 
 
-
+<%
+		if(session.getAttribute("ID")!=null)
+		{
+			out.println(session.getAttribute("USER"));
+			out.println(session.getAttribute("USERNAME"));
+			out.println(session.getAttribute("ID"));
+		}
+		else{
+			String redirectURL = "login.jsp";
+    	    response.sendRedirect(redirectURL);
+			
+		}
+%>
 
 
 </body>
