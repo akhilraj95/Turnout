@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
-    import="java.sql.*"%>
+    import="java.sql.*,java.util.ArrayList"%>
   
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -29,10 +29,11 @@
 
 done	1) teacher link to register<br>							
 done	2) student link to register<br>
-		3) teacher link to add class<br>
-		4) student link to register to class<br>
+done	3) teacher link to add class<br>
+done	4) student link to register to class<br>
 		5) teacher link to view attendance<br>
 		6) student link to view all of their attendance<br>
+		7) teacher link to add class + attendance
 		
 		do if time permits 
 		~ teacher link to edit students
@@ -82,7 +83,8 @@ Session variable map
   </div>
 </nav>
 
-
+	
+<div class="container">	
 <%
 		// checks if logged in , if not redirect to login
 		if(session.getAttribute("ID")!=null)
@@ -109,17 +111,133 @@ Session variable map
 			{	
 				// STUDENT VIEW
 				%>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+					<!-- /////////// MODAL TO JOIN CLASS \\\\\\\\\\\\ --> 
+							<div class="container-fluid">
+							  <!-- Trigger the modal with a button -->
+							  <h4 class ="col-sm-10"><b>Your Classes</b></h4>
+							  <button type="button" class="btn btn-info btn-md col-sm-2" data-toggle="modal" data-target="#myModal">Join Class</button>
+							
+							  <!-- Modal -->
+							  <div class="modal fade" id="myModal" role="dialog">
+							    <div class="modal-dialog">
+							    
+							      <!-- Modal content-->
+							      <div class="modal-content">
+							        <div class="modal-header">
+							          <button type="button" class="close" data-dismiss="modal">&times;</button>
+							          <h4 class="modal-title">Join Class</h4>
+							        </div>
+							        <div class="modal-body">
+							         		<!-- FORM FOR CREATING CLASS -->
+							         		<form class="form-horizontal" role="form" action="joinclass.jsp" method="POST">			 
+										    <div class="form-group">
+										      <label class="control-label col-sm-2" >Class Name:</label>
+										      <div class="col-sm-10">
+										        <input type="text" class="form-control" name="classname" placeholder="Enter Subject">
+										      </div>
+										    </div>
+										    <div class="form-group">
+										      <label class="control-label col-sm-2" for="pwd">Pass Key:</label>
+										      <div class="col-sm-10">          
+										        <input type="password" class="form-control" name="password" placeholder="Enter password">
+										      </div>
+										    </div>
+										    <div class="form-group">        
+										      <div class="col-sm-offset-2 col-sm-10">
+										        <button type="submit" class="btn btn-default">Submit</button>
+										      </div>
+										    </div>
+										  </form>
+							         			
+							        </div>
+							        <div class="modal-footer">
+							          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							        </div>
+							      </div>
+							      
+							    </div>
+							  </div>
+							</div>
+					</div>
+						<div class="panel-body">
+								<!-- /////////// Displays All Of His Classes\\\\\\\\\\\ -->
+									<div class="container-fluid">
+									  <div class="row">
+									  	<div class="table-responsive">
+									  		<table class="table table-striped table-hover">
+									  			<thead>	
+									  			<tr>
+									  				<th> Class Name</th>
+									  				<th> Attended</th>
+									  				<th> View Class</th>
+									  			</tr>
+									  			</thead>
+									  			<tbody>
+									  			<%	
+									  		
+									  		    try{
+									  				Class.forName(JDBC_DRIVER);
+									  				conn = DriverManager.getConnection(DB_URL, USER, PASS);
+									  			
+									  				sql = "select classname,classcount,attended from class c,enrolled e where c.class_id=e.c_id and e.s_id = ?;";
+									  		    	stmt = conn.prepareStatement(sql);
+									  		    	stmt.setString(1,id);
+									  		    	ResultSet rs=stmt.executeQuery();
+									
+									  		    	while(rs.next())
+									  		    	{
+									  		    		Float percentage = (Float.parseFloat(rs.getString(3))/Float.parseFloat(rs.getString(2)))*100;
+									  		    		out.println("<tr class='active'>");
+									  		    		out.println("<td>"+rs.getString(1)+"</td>");
+									  		    		out.println("<td>"+String.valueOf(percentage)+"%"+"9("+rs.getString(3)+"/"+rs.getString(2)+")"+"</td>");
+									  		    		out.println("<td><form action='' method='POST'><button type='submit' class='btn btn-primary'>View <span class='glyphicon glyphicon-stats'></span></button></td>");
+									  		    		out.println("</tr>");
+									  		    		
+									  		    	}
+									  		    	
+									  		    	
+													}catch(SQLException se){
+														out.println("Oops : Technical Error , please try again later");
+													    se.printStackTrace();
+													}catch(Exception e){
+														out.println("Oops : Technical Error , please try again later");
+													    e.printStackTrace();
+													}finally{
+													        
+														 try{
+															 if(conn!=null)
+														            conn.close();
+													        }catch(SQLException se){
+													           se.printStackTrace();
+													        }
+													}
+									  			
+									  			%>
+									  			</tbody>
+								  		</table>
+								  	</div>
+								  </div>
+								</div>	
+						</div>
+					</div>
+	</div>		
 				<%
 			}
 			else if(user.equals("TEACHER"))
 			{
+				ArrayList<String> classlist = new ArrayList();
+				ArrayList<String> idlist = new ArrayList();
+				
 				// TEACHER VIEW
+				
 				%>
 					
 				<div class="panel panel-default">
 					<div class="panel-heading">
 					<!-- /////////// MODAL TO ADD CLASS \\\\\\\\\\\\ --> 
-							<div class="container">
+							<div class="container-fluid">
 							  <!-- Trigger the modal with a button -->
 							  <h4 class ="col-sm-10"><b>Your Classes</b></h4>
 							  <button type="button" class="btn btn-info btn-md col-sm-2" data-toggle="modal" data-target="#myModal">Add Class</button>
@@ -180,9 +298,9 @@ Session variable map
 					</div>
 					<div class="panel-body">
 					<!-- /////////// Displays All Of His Classes\\\\\\\\\\\ -->
-						<div class="container">
+						<div class="container-fluid">
 						  <div class="row">
-						  	<div>
+						  	<div class="table-responsive">
 						  		<table class="table table-striped table-hover">
 						  			<thead>	
 						  			<tr>
@@ -190,28 +308,40 @@ Session variable map
 						  				<th> Pass key</th>
 						  				<th> Classes held</th>
 						  				<th> Students Enrolled</th>
+						  				<th> View Class</th>
 						  			</tr>
 						  			</thead>
 						  			<tbody>
 						  			<%	
 						  		
-						  		    
+						  		    	
 						  		    try{
 						  				Class.forName(JDBC_DRIVER);
 						  				conn = DriverManager.getConnection(DB_URL, USER, PASS);
 						  			
-						  				sql = "select classname,password,classcount,enrollednumber from class where t_id = ?";
+						  				sql = "select classname,password,classcount,enrollednumber,class_id from class where t_id = ?";
 						  		    	stmt = conn.prepareStatement(sql);
 						  		    	stmt.setString(1,id);
 						  		    	ResultSet rs=stmt.executeQuery();
 						  		    	
+						  		    		int count=0;
 							  		    	while(rs.next())
-							  		    	{	out.println("<tr class=' active'>");
+							  		    	{	
+							  		    		classlist.add(rs.getString(1));
+							  		    		idlist.add(rs.getString(5));
+							  		    		
+							  		    		out.println("<tr class=' active'>");
 							  		    		out.println("<td>"+rs.getString(1)+"</td>");
 							  		    		out.println("<td>"+rs.getString(2)+"</td>");
 							  		    		out.println("<td>"+rs.getString(3)+"</td>");
 							  		    		out.println("<td>"+rs.getString(4)+"</td>");
+							  		    		out.println("<td>"+"<form action='' method='POST'><button type='submit' class='btn btn-primary'>View <span class='glyphicon glyphicon-stats'></span></button></form>"+"</td>");
 							  		    		out.println("</tr>");
+							  		    		count++;
+							  		    	}
+							  		    	if(count==0)
+							  		    	{
+							  		    		out.println("no classes added");
 							  		    	}
 						  		    	
 										}catch(SQLException se){
@@ -236,6 +366,40 @@ Session variable map
 					  	</div>
 					  </div>
 					</div>						  			
+					</div>
+					</div>
+					
+					<div class="panel panel-default">
+				      <div class="panel-heading">Take Attendance</div>
+				      <div class="panel-body">
+				      		<table class="table table-striped table-hover">
+				    			<thead>	
+									<tr>
+									  		<th> Class Name</th>
+									  		<th> Take attendance</th>
+									</tr>
+								</thead>  			
+								<tbody>
+									<% 
+									for(int i=0;i<classlist.size();i++)
+									{
+										out.println("<tr>");
+											out.println("<td>");
+												out.println(classlist.get(i));
+											out.println("</td>");
+
+											out.println("<td>");
+												out.println("<form action='takeattendance.jsp' method='POST'><input type='hidden' name='id' value='"+idlist.get(i)+"'><button type='submit' class='btn btn-primary	'>Take Attendance</button></form>");
+											out.println("</td>");
+										out.println("</tr>");
+									}
+									%>
+								</tbody>
+				      		</table>
+				      </div>
+				    </div>
+									
+					
 					
 				<%
 			}

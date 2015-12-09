@@ -73,7 +73,7 @@
 		    PreparedStatement stmt = null;
 		    String sql = null;
 		    
-		    if((usn!= null || email!=null) && password!= null)
+		    if((usn!= null || email!=null) && password!=null)
 		    {	
 		    	
 				    try{
@@ -104,7 +104,7 @@
 						    		{
 						    			%>
 						    			<script language="javascript">
-						    			alert("Deletion successful");	
+						    			alert("Incorrect Credential");	
 						    			</script>
 						    			<%
 						    		}

@@ -1,0 +1,70 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"
+    import="java.sql.*"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+	//getting form parameters
+	String classname = request.getParameter("classname");
+	String password = request.getParameter("password");
+
+	//getting the session variables(session var map given at the top)
+	String user = (String) session.getAttribute("USER");
+	String username =(String)  session.getAttribute("USERNAME");
+	String id = (String) session.getAttribute("ID");
+
+	// JDBC driver name and database URL
+    String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
+    String DB_URL = "jdbc:mysql://www.virtualhighs.com:3306/turnout";
+
+   //  Database credentials
+    String USER = "ateam";
+    String PASS = "1191995";
+
+    Connection conn = null;
+    PreparedStatement stmt = null;
+    String sql = null;
+    
+    String class_id;
+    try{
+  		Class.forName(JDBC_DRIVER);
+  		conn = DriverManager.getConnection(DB_URL, USER, PASS);
+      
+  		sql = "select class_id from class where classname=? and password=?";
+      	stmt = conn.prepareStatement(sql);
+      	stmt.setString(1,classname);
+      	stmt.setString(2,password);
+      	ResultSet rs=stmt.executeQuery();
+      	
+      	if(rs.next())
+      	{	
+      		class_id=rs.getString("class_id");
+      		out.println(class_id);
+      		out.println(id);
+      	}
+      	
+    }catch(SQLException se){
+		out.println("Oops : Technical Error , please try again later");
+	    se.printStackTrace();
+	}catch(Exception e){
+		out.println("Oops : Technical Error , please try again later");
+	    e.printStackTrace();
+	}finally{
+	        
+		 try{
+			 if(conn!=null)
+		            conn.close();
+	        }catch(SQLException se){
+	           se.printStackTrace();
+	        }
+	}
+%>
+
+
+</body>
+</html>
