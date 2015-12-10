@@ -182,7 +182,7 @@ Session variable map
 									  				Class.forName(JDBC_DRIVER);
 									  				conn = DriverManager.getConnection(DB_URL, USER, PASS);
 									  			
-									  				sql = "select classname,classcount,attended from class c,enrolled e where c.class_id=e.c_id and e.s_id = ?;";
+									  				sql = "select classname,classcount,attended,class_id from class c,enrolled e where c.class_id=e.c_id and e.s_id = ?;";
 									  		    	stmt = conn.prepareStatement(sql);
 									  		    	stmt.setString(1,id);
 									  		    	ResultSet rs=stmt.executeQuery();
@@ -196,7 +196,8 @@ Session variable map
 									  		    		out.println("<tr class='active'>");
 									  		    		out.println("<td>"+rs.getString(1)+"</td>");
 									  		    		out.println("<td>"+String.valueOf(form.format(percentage))+"%"+"  ("+rs.getString(3)+"/"+rs.getString(2)+")"+"</td>");
-									  		    		out.println("<td><form action='' method='POST'><button type='submit' class='btn btn-primary'>View <span class='glyphicon glyphicon-stats'></span></button></td>");
+						//abdul - view student
+									  		    		out.println("<td><form action='studentview.jsp' method='POST'><input type='hidden' name='class_id' value='"+rs.getString(4)+"'><button type='submit' class='btn btn-primary'>View <span class='glyphicon glyphicon-stats'></span></button></td></form>");
 									  		    		out.println("</tr>");
 									  		    		
 									  		    	}
