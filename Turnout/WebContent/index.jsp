@@ -26,12 +26,13 @@
 
 <!-- 
 		TO DO LIST 
+COMMENT TO CHECK IF ABDUL CHANGES ARE UPDTATING OR NOT
 
 done	1) teacher link to register<br>							
 done	2) student link to register<br>
 done	3) teacher link to add class<br>
 done	4) student link to register to class<br>
-		5) teacher link to view attendance<br>
+done		5) teacher link to view attendance<br>
 		6) student link to view all of their attendance<br>
 		7) teacher link to add class + attendance
 		
