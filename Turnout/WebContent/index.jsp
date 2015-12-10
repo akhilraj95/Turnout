@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
-    import="java.sql.*,java.util.ArrayList"%>
+    import="java.sql.*,java.util.ArrayList,java.text.DecimalFormat"%>
   
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -189,9 +189,12 @@ Session variable map
 									  		    	while(rs.next())
 									  		    	{
 									  		    		Float percentage = (Float.parseFloat(rs.getString(3))/Float.parseFloat(rs.getString(2)))*100;
+									  		    		
+									  		    		DecimalFormat form = new DecimalFormat("00.00");
+									  		    		
 									  		    		out.println("<tr class='active'>");
 									  		    		out.println("<td>"+rs.getString(1)+"</td>");
-									  		    		out.println("<td>"+String.valueOf(percentage)+"%"+"9("+rs.getString(3)+"/"+rs.getString(2)+")"+"</td>");
+									  		    		out.println("<td>"+String.valueOf(form.format(percentage))+"%"+"  ("+rs.getString(3)+"/"+rs.getString(2)+")"+"</td>");
 									  		    		out.println("<td><form action='' method='POST'><button type='submit' class='btn btn-primary'>View <span class='glyphicon glyphicon-stats'></span></button></td>");
 									  		    		out.println("</tr>");
 									  		    		
@@ -370,7 +373,7 @@ Session variable map
 					</div>
 					
 					<div class="panel panel-default">
-				      <div class="panel-heading">Take Attendance</div>
+				      <div class="panel-heading"><b>Take Attendance</b></div>
 				      <div class="panel-body">
 				      		<table class="table table-striped table-hover">
 				    			<thead>	
@@ -389,7 +392,7 @@ Session variable map
 											out.println("</td>");
 
 											out.println("<td>");
-												out.println("<form action='takeattendance.jsp' method='POST'><input type='hidden' name='id' value='"+idlist.get(i)+"'><button type='submit' class='btn btn-primary	'>Take Attendance</button></form>");
+												out.println("<form action='takeattendance.jsp' method='POST'><input type='hidden' name='class_id' value='"+idlist.get(i)+"'><button type='submit' class='btn btn-primary	'>Take Attendance</button></form>");
 											out.println("</td>");
 										out.println("</tr>");
 									}
