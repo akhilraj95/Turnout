@@ -32,12 +32,12 @@ done	1) teacher link to register<br>
 done	2) student link to register<br>
 done	3) teacher link to add class<br>
 done	4) student link to register to class<br>
-done		5) teacher link to view attendance<br>
-		6) student link to view all of their attendance<br>
-		7) teacher link to add class + attendance
+done	5) teacher link to view attendance<br>
+done	6) student link to view all of their attendance<br>
+done	7) teacher link to add class + attendance
 		
 		do if time permits 
-		~ teacher link to edit students
+??		~ teacher link to edit students
 	
 Session variable map
 	user -> indicates the type of user {student,teacher}
@@ -328,6 +328,7 @@ Session variable map
 						  		    	stmt = conn.prepareStatement(sql);
 						  		    	stmt.setString(1,id);
 						  		    	ResultSet rs=stmt.executeQuery();
+						  		    	//String class_id=rs.getString(5);
 						  		    	
 						  		    		int count=0;
 							  		    	while(rs.next())
@@ -340,7 +341,7 @@ Session variable map
 							  		    		out.println("<td>"+rs.getString(2)+"</td>");
 							  		    		out.println("<td>"+rs.getString(3)+"</td>");
 							  		    		out.println("<td>"+rs.getString(4)+"</td>");
-							  		    		out.println("<td>"+"<form action='' method='POST'><button type='submit' class='btn btn-primary'>View <span class='glyphicon glyphicon-stats'></span></button></form>"+"</td>");
+							  		    		out.println("<td>"+"<form action='teacherview.jsp' method='POST'><input type='hidden' name='class_id' value='"+rs.getString(5)+"'><button type='submit' class='btn btn-primary'>View <span class='glyphicon glyphicon-stats'></span></button></form>"+"</td>");
 							  		    		out.println("</tr>");
 							  		    		count++;
 							  		    	}

@@ -62,7 +62,7 @@
 	  			<thead>	
 	  			<tr>
 	  				<th> Date</th>
-	  				<th> Attendance</th>
+	  				<th> No of Students attended</th>
 	  			</tr>
 	  			</thead>
 	  			<tbody>
@@ -93,11 +93,10 @@
 		Class.forName(JDBC_DRIVER);
 		conn = DriverManager.getConnection(DB_URL, USER, PASS);
 		
-		sql = "select date , s_id from recordclass rc left join record r on rc.rc_id=r.rc_id and r.s_id=? where rc.c_id=?";
+		sql="select date ,count(*) from recordclass rc , record r where rc.c_id=? and r.rc_id=rc.rc_id group by date;";
 	  	stmt = conn.prepareStatement(sql);
-	  	stmt.setString(1,id);
-	  	stmt.setString(2,class_id);
-	  	//out.println(stmt);
+	  	stmt.setString(1,class_id);
+	
 	  	
 	  	ResultSet rs=stmt.executeQuery();
 	  	
@@ -105,12 +104,7 @@
 	  	{
 	  			out.println("<tr>");
 	  			out.println("<td>"+rs.getString(1)+"</td>");
-	  			out.println("<td>");
-	  			if(rs.getString(2)==null)
-	  				out.println("<h4><span class='glyphicon glyphicon-remove' style=' color : red'></span></h4>");
-	  			else
-	  				out.println("<h4><span class='glyphicon glyphicon-ok' style=' color : green'></span></h4>");
-	  			out.println("</td>");
+	  			out.println("<td>"+rs.getString(2)+"</td>");
 	  			out.println("</tr>");
 	  	}
 	  	
